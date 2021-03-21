@@ -16,11 +16,33 @@ void motorHareket(String yon); // ileri, geri, sag, sol
 void setup() {
   Serial.begin(9600);
   Serial1.begin(9600);
-  Serial2.begin(9600);
+  //Serial2.begin(9600);
 }
 
 void loop() {
   motorHiz = 210;
+
+  if (Serial1.available() > 0) {
+    Serial1.readBytes(gelenVeri, 2);
+    Serial.println(gelenVeri);
+    if (gelenVeri[0] == 'A') { // dur - calis
+      aracCalisti = !aracCalisti;
+      motorHareket("dur");
+    }
+    if (gelenVeri[0] == 'B' && aracCalisti) { // ileri
+      duzGit();
+    }
+    if (gelenVeri[0] == 'C' && aracCalisti) { // geri
+      motorHareket("geri");
+    }
+    if (gelenVeri[0] == 'D' && aracCalisti) { // sag
+      sagaGit();
+    }
+    if (gelenVeri[0] == 'E' && aracCalisti) { // sol
+      solaGit();
+    }
+  }
+  /*
   Serial2.begin(9600);
   if (Serial1.available() > 0) {
       aracCalisti = true;
@@ -62,30 +84,34 @@ void loop() {
   else {
     motorHareket("dur");
   }
+  */
 }
 
 void sagaGit() {
   motorHiz = 250;
   motorHizAyarla();
+  /*
   motorHareket("geri");
   delay(200);
+  */
   motorHareket("sag");
-  delay(400);
+  //delay(400);
 }
 
 void solaGit() {
   motorHiz = 250;
   motorHizAyarla();
-  motorHareket("geri");
-  delay(200);
+  //motorHareket("geri");
+  //delay(200);
   motorHareket("sol");
-  delay(400);
+  //delay(400);
 }
 
 void duzGit() {
   motorHiz = 210;
   motorHizAyarla();
   motorHareket("ileri");
+  //delay(1000);
 }
 
 void motorHizAyarla() {
